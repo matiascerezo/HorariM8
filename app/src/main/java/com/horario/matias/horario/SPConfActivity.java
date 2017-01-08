@@ -106,8 +106,11 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
                 break;
             case TEMAFOSC:
                 boolean temaFosc = shaPrefs.getBoolean(TEMAFOSC, false);
-                    //getActivity().findViewById(R.id.activity_main).setBackgroundColor(Color.rgb(69,69,69));
+                if(temaFosc){
                     Toast.makeText(getActivity().getApplicationContext(), "Tema fosc activat", Toast.LENGTH_SHORT).show();
+                }
+                    //getActivity().findViewById(R.id.activity_main).setBackgroundColor(Color.rgb(69,69,69));
+                    Toast.makeText(getActivity().getApplicationContext(), "Tema fosc desactivat", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
