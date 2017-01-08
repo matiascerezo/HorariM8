@@ -99,15 +99,14 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
                 break;
             case GRUP:
                 String grup = "" + shaPrefs.getString(GRUP, "NULL");
-                TextView tvGrup = (TextView) getActivity().findViewById(R.id.tvGrup);
+                //TextView tvGrup = (TextView) getActivity().findViewById(R.id.tvGrup);
                 //tvGrup.setTextColor(Color.WHITE);
-                tvGrup.setText(grup);
-                getActivity().findViewById(R.id.activity_main).findViewById(R.id.tvGrup);
+                //tvGrup.setText(grup);
                 Toast.makeText(getActivity().getApplicationContext(), "Guardat correctament", Toast.LENGTH_SHORT).show();
                 break;
             case TEMAFOSC:
                 boolean temaFosc = shaPrefs.getBoolean(TEMAFOSC, false);
-                    getActivity().findViewById(R.id.activity_main).setBackgroundColor(Color.rgb(69,69,69));
+                    //getActivity().findViewById(R.id.activity_main).setBackgroundColor(Color.rgb(69,69,69));
                     Toast.makeText(getActivity().getApplicationContext(), "Tema fosc activat", Toast.LENGTH_SHORT).show();
                 break;
         }
