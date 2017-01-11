@@ -2,15 +2,11 @@ package com.horario.matias.horario;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.TextView;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 public class SPConfActivity extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -72,6 +68,7 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
     }
 
 
+    @NonNull
     public static String getNombre() {
         return NOM;
     }
@@ -80,11 +77,12 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
         return GRUP;
     }
 
-    public String getTemaFosc() {
+    public static String getTemaFosc() {
         return TEMAFOSC;
     }
+
     /**
-     * Per quan es canvii alguna cosa desde el menu de preferencies
+     * Per quan es canvii alguna cosa desde el menu de preferencies mostrarem uns Toasts.
      * @param shaPrefs
      * @param key
      */
@@ -96,21 +94,21 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
             case NOM:
                 String nom ="" + shaPrefs.getString(NOM, "NULL");
                 Toast.makeText(getActivity().getApplicationContext(), "Guardat correctament", Toast.LENGTH_SHORT).show();
+                new Horari().reiniciarApp();
                 break;
             case GRUP:
                 String grup = "" + shaPrefs.getString(GRUP, "NULL");
-                //TextView tvGrup = (TextView) getActivity().findViewById(R.id.tvGrup);
-                //tvGrup.setTextColor(Color.WHITE);
-                //tvGrup.setText(grup);
                 Toast.makeText(getActivity().getApplicationContext(), "Guardat correctament", Toast.LENGTH_SHORT).show();
+                new Horari().reiniciarApp();
                 break;
             case TEMAFOSC:
                 boolean temaFosc = shaPrefs.getBoolean(TEMAFOSC, false);
                 if(temaFosc){
                     Toast.makeText(getActivity().getApplicationContext(), "Tema fosc activat", Toast.LENGTH_SHORT).show();
+                    new Horari().reiniciarApp();
                 }else {
-                    //getActivity().findViewById(R.id.activity_main).setBackgroundColor(Color.rgb(69,69,69));
                     Toast.makeText(getActivity().getApplicationContext(), "Tema fosc desactivat", Toast.LENGTH_SHORT).show();
+                    new Horari().reiniciarApp();
                 }
                 break;
         }

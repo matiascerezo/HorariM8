@@ -2,17 +2,10 @@
     <string name="app_name">Horari</string>
     <string name="nom_opcions">Opcions</string>
     <string name="configuracion">Configuració</string>
-    <string name="tvPregunta">¿QUÉ HORARIO QUIERES VER?</string>
-    <string name="botonInicial">VER HORARIO</string>
-    <string name="rbA1">A1</string>
-    <string name="rbA2">A2</string>
-    <string name="mensajeRb">Tienes que seleccionar la clase.</string>
-    <string name="tvError">¡Error! Selecciona una opción.</string>
     <string name="tvnom">Alumne</string>
 
     <string-array name="arrayGrups">
         <item>A1</item>
         <item>A2</item>
     </string-array>
-
 </resources>

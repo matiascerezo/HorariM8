@@ -9,7 +9,6 @@
         android:key="etNom"
         android:summary="Nom del alumne."/>
     <ListPreference
-        android:defaultValue="A1"
         android:title="Grup"
         android:entries="@array/arrayGrups"
         android:entryValues="@array/arrayGrups"
