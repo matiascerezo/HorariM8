@@ -3,6 +3,10 @@
     <string name="nom_opcions">Opcions</string>
     <string name="configuracion">Configuració</string>
     <string name="tvnom">Alumne</string>
+    <string name="introdPrefs">Has de introduir les teves preferencies</string>
+    <string name="foscActivat">Tema fosc activat</string>
+    <string name="foscDesactivat">Tema fosc desactivat</string>
+    <string name="guardatOk">Guardat correctament</string>
 
     <string-array name="arrayGrups">
         <item>A1</item>

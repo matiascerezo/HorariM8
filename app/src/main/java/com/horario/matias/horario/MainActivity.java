@@ -7,13 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static com.horario.matias.horario.Horari.bdActivity;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView tvGrup, tvDia, tvAssignatura, tvProfessor, tvHoraInici, tvClasse, tvHoraFi, tvSeparacio;
     //Horari horari = new Horari();
@@ -103,5 +102,16 @@ public class MainActivity extends AppCompatActivity {
     public void retornarGrup(String grup) {
         Intent iHorari = new Intent(this, Horari.class);
         iHorari.putExtra("grup", grup);
+    }
+
+    public void botoActualitzarValors(View v) {
+        switch (v.getId()){
+            //case
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }
