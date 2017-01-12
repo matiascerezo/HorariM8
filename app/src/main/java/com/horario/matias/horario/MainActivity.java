@@ -1,13 +1,13 @@
 package com.horario.matias.horario;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +15,9 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView tvGrup, tvDia, tvAssignatura, tvProfessor, tvHoraInici, tvClasse, tvHoraFi, tvSeparacio;
-    //Horari horari = new Horari();
-    SQLiteDatabase db;
+    ImageButton btnActualizar;
+    Horari horari = new Horari();
+    BDActivity sqlHelper;
 
     /**
      * Métode onCreate que obté el dia actual i el posa al TextView, també mostrarà el grup una vegada
@@ -32,11 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horario);
 
-        //horari.consultaValors(); --> Mi idea es: creo BD i hago consulta añadiendolos en un array de String
-        //los valores que salen en la consulta
-        //horari.setTV(); --> Setteo los TextViews con los valores anteriores.
-        Toast.makeText(this, new Horari().getDiaSetmanaSistema(), Toast.LENGTH_LONG).show();
-
         tvGrup = (TextView) findViewById(R.id.tvGrup);
         tvDia = (TextView) findViewById(R.id.tvDia);
         tvAssignatura = (TextView) findViewById(R.id.tvAssignatura);
@@ -45,8 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvHoraInici = (TextView) findViewById(R.id.tvHoraInici);
         tvClasse = (TextView) findViewById(R.id.tvClase);
         tvSeparacio = (TextView) findViewById(R.id.tvSeparacio);
+        //btnActualizar = (ImageButton) findViewById(R.id.btnAct);
+        //btnActualizar.setOnClickListener(this);
 
-        tvDia.setText(new Horari().getDiaSetmanaSistema());
+        tvDia.setText(Horari.getDiaSetmanaSistema());
         if (SPConfActivity.getString(this, SPConfActivity.getNombre()).isEmpty() &&
                 SPConfActivity.getString(this, SPConfActivity.getGrup()).isEmpty() &&
                 !SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
@@ -54,14 +52,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             Toast.makeText(this, "Benvingut " + SPConfActivity.getString(this, SPConfActivity.getNombre()), Toast.LENGTH_LONG).show();
             tvGrup.setText(SPConfActivity.getString(this, SPConfActivity.getGrup()));
-            retornarGrup(tvGrup.getText().toString());
-
-            if (SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
-                tvGrup.setTextColor(Color.WHITE);
-                tvDia.setTextColor(Color.WHITE);
-                findViewById(R.id.activity_horario).setBackgroundColor(Color.rgb(169, 169, 169));
+            if (SPConfActivity.getString(this, SPConfActivity.getGrup()).isEmpty()) {
+                Toast.makeText(this, "Falta introduir el grup.", Toast.LENGTH_SHORT).show();
+            } else {
+                sqlHelper = new BDActivity(this);
+                sqlHelper.getWritableDatabase();
+                sqlHelper.getHorariPerHora();
+                horari.setTV();
+                if (SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
+                    tvGrup.setTextColor(Color.WHITE);
+                    tvDia.setTextColor(Color.WHITE);
+                    findViewById(R.id.activity_horario).setBackgroundColor(Color.rgb(169, 169, 169));
+                }
             }
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        //Una vez funcionen las consultas y settear los textviews, añadir los metodos aqui.
+        sqlHelper.getHorariPerHora();
+        horari.setTV();
     }
 
     /**
@@ -94,24 +105,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Retornem el grup a la activity del horari
-     *
-     * @param grup
-     */
-    public void retornarGrup(String grup) {
-        Intent iHorari = new Intent(this, Horari.class);
-        iHorari.putExtra("grup", grup);
-    }
-
-    public void botoActualitzarValors(View v) {
-        switch (v.getId()){
-            //case
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
 }

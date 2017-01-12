@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -16,9 +17,42 @@ import java.util.Date;
 
 public class Horari extends AppCompatActivity {
 
-    static SQLiteDatabase db;
-    static BDActivity bdActivity;
-    ArrayList<String> valors = new ArrayList<>();
+    private String assignatura;
+    private String professor;
+    private String classe;
+    private String horaInici;
+    private String horaFinal;
+
+    public Horari() {
+    }
+
+    public Horari(String assignatura, String professor, String classe, String horaInici, String horaFinal) {
+        this.assignatura = assignatura;
+        this.professor = professor;
+        this.classe = classe;
+        this.horaInici = horaInici;
+        this.horaFinal = horaFinal;
+    }
+
+    public String getAssignatura() {
+        return assignatura;
+    }
+
+    public String getProfessor() {
+        return professor;
+    }
+
+    public String getClasse() {
+        return classe;
+    }
+
+    public String getHoraInici() {
+        return horaInici;
+    }
+
+    public String getHoraFinal() {
+        return horaFinal;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,50 +94,17 @@ public class Horari extends AppCompatActivity {
         return dateFormat.format(date);
     }
 
-   /* public void crearBD() {
-        bdActivity = new BDActivity(this, "BDHorari", null, 1);
-        db = bdActivity.getWritableDatabase();
-    }*/
-
     /**
-     * Retornem els valors de la consulta i el retornem en un arraylist.
+     * Mètode per possar el contingut als TextViews.
      */
-    public ArrayList<String> consultaValors() {
-
-        bdActivity = new BDActivity(this, "BDHorari", null, 1);
-        db = bdActivity.getWritableDatabase();
-
-
-        String grupPrefs = getIntent().getStringExtra("grup");
-
-        //String grupPrefs = "A2";
-
-        if (db != null) {
-            String[] args = new String[]{getHoraSistema(), grupPrefs, getDiaSetmanaSistema()};
-            Cursor c = db.rawQuery("SELECT * FROM THoraris WHERE ? BETWEEN horaInici AND horaFi AND grup = ? AND dia = ?", args);
-            if (c.moveToFirst()) {
-                do {
-                    valors.add(bdActivity.getProfOAss(Integer.parseInt(c.getString(1)), false));//afegeix nom assignatura a l'array.
-                    valors.add(c.getString(2)); // afegeix l'hora d'inici a l'array.
-                    valors.add(c.getString(3)); //afegeix l'hora final a l'array.
-                    valors.add(bdActivity.getProfOAss(Integer.parseInt(c.getString(4)), true)); // afegeix el nom del professor a l'array
-                    valors.add(c.getString(5)); //afegeix la classe a l'array
-                } while (c.moveToNext());
-            }
-        } else {
-            Toast.makeText(this, "No hi ha classe en aquest moment.", Toast.LENGTH_SHORT).show();
-        }
-        return valors;
-    }
-
     public void setTV() {
         MainActivity ma = new MainActivity();
-        ma.tvClasse.setText(valors.get(0));
-        ma.tvHoraInici.setText(valors.get(1));
-        ma.tvHoraFi.setText(valors.get(2));
-        ma.tvProfessor.setText(valors.get(3));
-        ma.tvClasse.setText(valors.get(4));
-        ma.tvSeparacio.setText("-");
+        ma.tvClasse.setText(getClasse());
+        ma.tvHoraInici.setText(getHoraInici());
+        ma.tvHoraFi.setText(getHoraFinal());
+        ma.tvProfessor.setText(getProfessor());
+        ma.tvAssignatura.setText(getAssignatura());
+        ma.tvSeparacio.setVisibility(View.VISIBLE);
     }
 }
 

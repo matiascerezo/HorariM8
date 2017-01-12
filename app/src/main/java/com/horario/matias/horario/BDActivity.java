@@ -1,25 +1,36 @@
 package com.horario.matias.horario;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class BDActivity extends SQLiteOpenHelper {
 
-    /*private String columnes = "idHorari, grup, modul, nomProfe, classe, horaInici, horaFi, dia";
+    private String columnes = "idHorari, grup, modul, nomProfe, classe, horaInici, horaFi, dia";
     private String taules = " THoraris H, TAssignatura A, TProfessors P, TGrups";
-    private String where = "H.grup = T.grup AND H.idAssignatura = A.idAssignatura AND H.idProfessor = P.idProfessor";*/
+    private String where = "H.grup = T.grup AND H.idAssignatura = A.idAssignatura AND H.idProfessor = P.idProfessor";
+    Context context;
 
-    public BDActivity(Context context, String nombre, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, nombre, factory, version);
+    public BDActivity(Context context) {
+        super(context, "DBHorari", null, 1);
+        this.context = context;
     }
 
     //Creació de las bases de dades que guarden els professors, les asignatures i els horaris de les classes.
     final String THORARIS = "CREATE TABLE THoraris(idHorari INTEGER PRIMARY KEY, grup TEXT, idAsignatura INTEGER,horaInici TEXT, horaFi TEXT, dia TEXT, idProfessor INTEGER, classe TEXT)";
     final String TPROFESSORS = "CREATE TABLE TProfessors(idProfessor INTEGER PRIMARY KEY, nomProfe TEXT)";
     final String TASSIGNATURES = "CREATE TABLE TAssignatura(idAssignatura INTEGER PRIMARY KEY, modul TEXT, idProfessor INTEGER)";
-    final String TGRUPS = "CREATE TABLE TGrups(grup TEXT)";
+    final String TGRUPS = "CREATE TABLE TGrups(nomGrup TEXT)";
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -40,8 +51,8 @@ public class BDActivity extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("INSERT INTO TProfessors VALUES(6, 'Cap')");
 
         //Insertem els professors a la taula "TGrups".
-        sqLiteDatabase.execSQL("INSERT INTO TProfessors VALUES('A1')");
-        sqLiteDatabase.execSQL("INSERT INTO TProfessors VALUES('A2')");
+        sqLiteDatabase.execSQL("INSERT INTO TGrups VALUES('A1')");
+        sqLiteDatabase.execSQL("INSERT INTO TGrups VALUES('A2')");
 
         //Insertem les assignatures a la taula "TAsignatures".
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(1, 'M07. Desenvolupament de interfícies', 1)");
@@ -118,25 +129,31 @@ public class BDActivity extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("INSERT INTO THoraris VALUES (44, 'A2', '5', '19:21', '21:20', 'Divendres', 5, '201')");
     }
 
-    public String getProfOAss(int id, boolean esProf) {
-        SQLiteDatabase db = getReadableDatabase();
-        String[] valors = {Integer.toString(id)};
-        Cursor c;
+    /**
+     * Obtenim l'horari per cada hora individual.
+     * @return
+     */
+    public Horari getHorariPerHora() {
+        String grup = PreferenceManager.getDefaultSharedPreferences(context).getString("grup", "A1");
+        String diaSemana = Horari.getDiaSetmanaSistema();
 
-        if (esProf) {
-            c = db.rawQuery("SELECT nom FROM TProfessors WHERE ? LIKE idProfessor", valors);
-        } else {
-            c = db.rawQuery("SELECT nom FROM TAssignatura WHERE ? = idAssignatura",valors);
-        }
+        Cursor c = this.getReadableDatabase().rawQuery("SELECT " + columnes + " FROM " + taules +
+                        " WHERE " + where + " AND dia = ? AND nomGrup = ? AND ? BETWEEN horaInici AND horaFi",
+                new String[]{diaSemana, grup, Horari.getHoraSistema()});
+        ArrayList<Horari> horaris = getHorariPorCursor(c);
+        return (horaris.size() == 0 ? null : horaris.get(0));
+    }
 
-        if (c != null) {
-            c.moveToFirst();
+    private ArrayList<Horari> getHorariPorCursor(Cursor c) {
+        ArrayList<Horari> horaris = new ArrayList<>();
+        if (c.moveToFirst()) {
+            do {
+                horaris.add(new Horari(c.getString(0), c.getString(1), c.getString(2)
+                        , c.getString(3), c.getString(4)));
+            } while (c.moveToNext());
         }
-        String valor = c.getString(0);
-        db.close();
         c.close();
-
-        return valor;
+        return horaris;
     }
 
     @Override

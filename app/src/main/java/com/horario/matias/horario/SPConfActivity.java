@@ -12,6 +12,7 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
     private static final String NOM = "etNom";
     private static final String GRUP = "grup";
     private static final String TEMAFOSC = "temaFosc";
+    Horari horari;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,21 +93,21 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
             case NOM:
                 String nom ="" + shaPrefs.getString(NOM, "NULL");
                 Toast.makeText(getActivity().getApplicationContext(), getString(R.string.guardatOk), Toast.LENGTH_SHORT).show();
-                new Horari().reiniciarApp();
+                //horari.reiniciarApp();
                 break;
             case GRUP:
                 String grup = "" + shaPrefs.getString(GRUP, "NULL");
                 Toast.makeText(getActivity().getApplicationContext(), getString(R.string.guardatOk), Toast.LENGTH_SHORT).show();
-                new Horari().reiniciarApp();
+                //horari.reiniciarApp();
                 break;
             case TEMAFOSC:
                 boolean temaFosc = shaPrefs.getBoolean(TEMAFOSC, false);
                 if(temaFosc){
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.foscActivat), Toast.LENGTH_SHORT).show();
-                    new Horari().reiniciarApp();
+                    //horari.reiniciarApp();
                 }else {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.foscDesactivat), Toast.LENGTH_SHORT).show();
-                    new Horari().reiniciarApp();
+                    //horari.reiniciarApp();
                 }
                 break;
         }
