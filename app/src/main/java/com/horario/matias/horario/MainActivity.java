@@ -5,18 +5,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import static com.horario.matias.horario.Horari.bdActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView tvGrup, tvDia;
-    private SQLiteDatabase db;
+    TextView tvGrup, tvDia, tvAssignatura, tvProfessor, tvHoraInici, tvClasse, tvHoraFi, tvSeparacio;
+    //Horari horari = new Horari();
+    SQLiteDatabase db;
 
     /**
      * Métode onCreate que obté el dia actual i el posa al TextView, també mostrarà el grup una vegada
@@ -32,22 +33,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horario);
 
-        BDActivity bdActivity = new BDActivity(this, "BDHorari", null, 1);
-        db = bdActivity.getWritableDatabase();
-
-        //Toast.makeText(this, bdActivity.getProfessor(1),Toast.LENGTH_LONG).show();
+        //horari.consultaValors(); --> Mi idea es: creo BD i hago consulta añadiendolos en un array de String
+        //los valores que salen en la consulta
+        //horari.setTV(); --> Setteo los TextViews con los valores anteriores.
+        Toast.makeText(this, new Horari().getDiaSetmanaSistema(), Toast.LENGTH_LONG).show();
 
         tvGrup = (TextView) findViewById(R.id.tvGrup);
         tvDia = (TextView) findViewById(R.id.tvDia);
+        tvAssignatura = (TextView) findViewById(R.id.tvAssignatura);
+        tvProfessor = (TextView) findViewById(R.id.tvProfessor);
+        tvHoraFi = (TextView) findViewById(R.id.tvHoraFi);
+        tvHoraInici = (TextView) findViewById(R.id.tvHoraInici);
+        tvClasse = (TextView) findViewById(R.id.tvClase);
+        tvSeparacio = (TextView) findViewById(R.id.tvSeparacio);
 
-        tvDia.setText(getDiaSetmana());
+        tvDia.setText(new Horari().getDiaSetmanaSistema());
         if (SPConfActivity.getString(this, SPConfActivity.getNombre()).isEmpty() &&
                 SPConfActivity.getString(this, SPConfActivity.getGrup()).isEmpty() &&
                 !SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
-           Toast.makeText(this, "Has d'introduir les teves preferencies", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.introdPrefs), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Benvingut " + SPConfActivity.getString(this, SPConfActivity.getNombre()), Toast.LENGTH_LONG).show();
-                tvGrup.setText(SPConfActivity.getString(this, SPConfActivity.getGrup()));
+            tvGrup.setText(SPConfActivity.getString(this, SPConfActivity.getGrup()));
+            retornarGrup(tvGrup.getText().toString());
 
             if (SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
                 tvGrup.setTextColor(Color.WHITE);
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Para abrir el menú de arriba a la derecha de "configuración".
+     * Per obrir el menú de dalt a la dreta de "configuració".
      *
      * @param menu
      * @return
@@ -69,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Para iniciar la Activity de configuració al fer click.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -82,15 +96,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Per obtenir el dia de la semana actual.
+     * Retornem el grup a la activity del horari
      *
-     * @return
+     * @param grup
      */
-    public String getDiaSetmana() {
-        Calendar cal = Calendar.getInstance();
-        String[] diesSetmana = new String[]{"Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"};
-        int numeroDia = cal.get(Calendar.DAY_OF_WEEK);
-        String dia = diesSetmana[numeroDia - 1];
-        return dia;
+    public void retornarGrup(String grup) {
+        Intent iHorari = new Intent(this, Horari.class);
+        iHorari.putExtra("grup", grup);
     }
 }
