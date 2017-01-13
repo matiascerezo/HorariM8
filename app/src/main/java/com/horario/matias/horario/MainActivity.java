@@ -52,14 +52,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, getString(R.string.introdPrefs), Toast.LENGTH_LONG).show();
             sqlHelper = new BDActivity(this);
             sqlHelper.getWritableDatabase();
-            setTV();
+            //setTV(); -> prueba
         } else {
             Toast.makeText(this, "Benvingut " + SPConfActivity.getString(this, SPConfActivity.getNombre()), Toast.LENGTH_LONG).show();
             tvGrup.setText(SPConfActivity.getString(this, SPConfActivity.getGrup()));
             if (SPConfActivity.getString(this, SPConfActivity.getGrup()).isEmpty()) {
                 Toast.makeText(this, "Falta introduir el grup.", Toast.LENGTH_SHORT).show();
             } else {
-                //setTV();
+                setTV();
                 if (SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
                     tvGrup.setTextColor(Color.WHITE);
                     tvDia.setTextColor(Color.WHITE);
