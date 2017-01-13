@@ -28,6 +28,10 @@ public class BDActivity extends SQLiteOpenHelper {
     private String where = "H.grup = G.nomGrup AND H.idAssignatura = A.idAssignatura AND H.idProfessor = P.idProfessor";
     Context context;
 
+    /**
+     * Constructor de BDActivity
+     * @param context
+     */
     public BDActivity(Context context) {
         super(context, "DBHorari", null, 1);
         this.context = context;
