@@ -17,6 +17,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class BDActivity extends SQLiteOpenHelper {
 
+    //Creació de las bases de dades que guarden els professors, les asignatures i els horaris de les classes.
+    final String THORARIS = "CREATE TABLE THoraris(idHorari INTEGER PRIMARY KEY, grup TEXT, idAssignatura INTEGER, horaInici TEXT, horaFi TEXT, dia TEXT, idProfessor INTEGER, classe TEXT)";
+    final String TPROFESSORS = "CREATE TABLE TProfessors(idProfessor INTEGER PRIMARY KEY, nomProfe TEXT)";
+    final String TASSIGNATURES = "CREATE TABLE TAssignatura(idAssignatura INTEGER PRIMARY KEY, modul TEXT, idProfessor INTEGER)";
+    final String TGRUPS = "CREATE TABLE TGrups(nomGrup TEXT)";
+
     private String columnes = "idHorari, grup, modul, nomProfe, classe, horaInici, horaFi, dia";
     private String taules = " THoraris H, TAssignatura A, TProfessors P, TGrups G";
     private String where = "H.grup = G.nomGrup AND H.idAssignatura = A.idAssignatura AND H.idProfessor = P.idProfessor";
@@ -26,12 +32,6 @@ public class BDActivity extends SQLiteOpenHelper {
         super(context, "DBHorari", null, 1);
         this.context = context;
     }
-
-    //Creació de las bases de dades que guarden els professors, les asignatures i els horaris de les classes.
-    final String THORARIS = "CREATE TABLE THoraris(idHorari INTEGER PRIMARY KEY, grup TEXT, idAssignatura INTEGER, horaInici TEXT, horaFi TEXT, dia TEXT, idProfessor INTEGER, classe TEXT)";
-    final String TPROFESSORS = "CREATE TABLE TProfessors(idProfessor INTEGER PRIMARY KEY, nomProfe TEXT)";
-    final String TASSIGNATURES = "CREATE TABLE TAssignatura(idAssignatura INTEGER PRIMARY KEY, modul TEXT, idProfessor INTEGER)";
-    final String TGRUPS = "CREATE TABLE TGrups(nomGrup TEXT)";
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
