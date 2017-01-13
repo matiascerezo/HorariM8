@@ -131,16 +131,16 @@ public class BDActivity extends SQLiteOpenHelper {
     }
 
     /**
-     * Obtenim l'horari per cada hora individual.
+     * Fem la consulta a la BD.
      *
      * @return
      */
     public Horari getHorariPerHora() {
 
-        //String grup = PreferenceManager.getDefaultSharedPreferences(context).getString("grup", "A1");
         String diaSemana = Horari.getDiaSetmanaSistema();
         String horaSistema = Horari.getHoraSistema();
-        String grup = "A2";
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shaPrefs", Context.MODE_PRIVATE);
+        String grup = sharedPreferences.getString("grup","A1");
 
         String[] valors = {diaSemana, grup, horaSistema};
 
@@ -151,6 +151,11 @@ public class BDActivity extends SQLiteOpenHelper {
         return (horaris.size() == 0 ? null : horaris.get(0));
     }
 
+    /**
+     * Afegim a l'Arraylist els valors.
+     * @param c
+     * @return
+     */
     private ArrayList<Horari> getHorariPorCursor(Cursor c) {
         ArrayList<Horari> horaris = new ArrayList<>();
         if (c.moveToFirst()) {

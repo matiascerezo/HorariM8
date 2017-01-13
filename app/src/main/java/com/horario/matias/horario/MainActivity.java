@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView tvGrup, tvDia, tvAssignatura, tvProfessor, tvHoraInici, tvClasse, tvHoraFi, tvSeparacio;
     ImageButton btnActualizar;
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Quan fem click al botó del actualitzar, comprovarà una altra vegada es valors i s'actualitzaràn.
+     *
      * @param view
      */
     @Override
@@ -112,12 +113,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setTV() {
         Horari horari = new BDActivity(this).getHorariPerHora();
         if (horari != null) {
-            tvAssignatura.setText(horari.getAssignatura());
-            tvProfessor.setText(horari.getProfessor());
-            tvClasse.setText(horari.getClasse());
-            tvHoraInici.setText(horari.getHoraInici());
-            tvSeparacio.setVisibility(View.VISIBLE);
-            tvHoraFi.setText(horari.getHoraFinal());
+            if (horari.getAssignatura().isEmpty()) {
+                tvProfessor.setText("Avui es festa.");
+            } else {
+                tvAssignatura.setText(horari.getAssignatura());
+                tvProfessor.setText(horari.getProfessor());
+                tvClasse.setText(horari.getClasse());
+                tvHoraInici.setText(horari.getHoraInici());
+                tvSeparacio.setVisibility(View.VISIBLE);
+                tvHoraFi.setText(horari.getHoraFinal());
+                Toast.makeText(this, "Actualitzat", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
