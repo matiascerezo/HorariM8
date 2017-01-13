@@ -143,8 +143,10 @@ public class BDActivity extends SQLiteOpenHelper {
 
         String diaSemana = Horari.getDiaSetmanaSistema();
         String horaSistema = Horari.getHoraSistema();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("shaPrefs", Context.MODE_PRIVATE);
-        String grup = sharedPreferences.getString("grup","A1");
+        SharedPreferences shaPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String grup = shaPref.getString("grup","A1");
+        //SharedPreferences shaPrefs = context.getSharedPreferences("shaPrefs", Context.MODE_PRIVATE);
+        //String grup = sharedPreferences.getString("grup","A1");
 
         String[] valors = {diaSemana, grup, horaSistema};
 
