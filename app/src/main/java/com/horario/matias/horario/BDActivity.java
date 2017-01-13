@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class BDActivity extends SQLiteOpenHelper {
 
     private String columnes = "idHorari, grup, modul, nomProfe, classe, horaInici, horaFi, dia";
-    private String taules = " THoraris H, TAssignatura A, TProfessors P, TGrups";
-    private String where = "H.grup = T.grup AND H.idAssignatura = A.idAssignatura AND H.idProfessor = P.idProfessor";
+    private String taules = " THoraris H, TAssignatura A, TProfessors P, TGrups G";
+    private String where = "H.grup = G.nomGrup AND H.idAssignatura = A.idAssignatura AND H.idProfessor = P.idProfessor";
     Context context;
 
     public BDActivity(Context context) {
@@ -27,7 +28,7 @@ public class BDActivity extends SQLiteOpenHelper {
     }
 
     //Creació de las bases de dades que guarden els professors, les asignatures i els horaris de les classes.
-    final String THORARIS = "CREATE TABLE THoraris(idHorari INTEGER PRIMARY KEY, grup TEXT, idAsignatura INTEGER,horaInici TEXT, horaFi TEXT, dia TEXT, idProfessor INTEGER, classe TEXT)";
+    final String THORARIS = "CREATE TABLE THoraris(idHorari INTEGER PRIMARY KEY, grup TEXT, idAssignatura INTEGER, horaInici TEXT, horaFi TEXT, dia TEXT, idProfessor INTEGER, classe TEXT)";
     final String TPROFESSORS = "CREATE TABLE TProfessors(idProfessor INTEGER PRIMARY KEY, nomProfe TEXT)";
     final String TASSIGNATURES = "CREATE TABLE TAssignatura(idAssignatura INTEGER PRIMARY KEY, modul TEXT, idProfessor INTEGER)";
     final String TGRUPS = "CREATE TABLE TGrups(nomGrup TEXT)";
@@ -55,12 +56,12 @@ public class BDActivity extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("INSERT INTO TGrups VALUES('A2')");
 
         //Insertem les assignatures a la taula "TAsignatures".
-        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(1, 'M07. Desenvolupament de interfícies', 1)");
+        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(1, 'M07. Des. de interfícies', 1)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(2, 'Tutoria', 2)");
-        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(3, 'M08. Programació multimèdia i dispositius mòbils', 3)");
-        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(4, 'M10. Sistemes de gestió empresarial', 4)");
+        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(3, 'M08. Prog. de d. mòbils', 3)");
+        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(4, 'M10. Sistemes de g. empresarial', 4)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(5, 'M02/06. BD i Accés a dades', 5)");
-        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(6, 'M09. Programacio de serveis i processos', 5)");
+        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(6, 'M09. Prog. de processos', 5)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(7, 'M03. Programació bàsica', 2)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(8, 'Pati', 6)");
 
@@ -131,15 +132,21 @@ public class BDActivity extends SQLiteOpenHelper {
 
     /**
      * Obtenim l'horari per cada hora individual.
+     *
      * @return
      */
     public Horari getHorariPerHora() {
-        String grup = PreferenceManager.getDefaultSharedPreferences(context).getString("grup", "A1");
+
+        //String grup = PreferenceManager.getDefaultSharedPreferences(context).getString("grup", "A1");
         String diaSemana = Horari.getDiaSetmanaSistema();
+        String horaSistema = Horari.getHoraSistema();
+        String grup = "A2";
+
+        String[] valors = {diaSemana, grup, horaSistema};
 
         Cursor c = this.getReadableDatabase().rawQuery("SELECT " + columnes + " FROM " + taules +
-                        " WHERE " + where + " AND dia = ? AND nomGrup = ? AND ? BETWEEN horaInici AND horaFi",
-                new String[]{diaSemana, grup, Horari.getHoraSistema()});
+                " WHERE " + where + " AND dia = ? AND nomGrup = ? AND ? BETWEEN horaInici AND horaFi", valors);
+
         ArrayList<Horari> horaris = getHorariPorCursor(c);
         return (horaris.size() == 0 ? null : horaris.get(0));
     }
@@ -148,8 +155,8 @@ public class BDActivity extends SQLiteOpenHelper {
         ArrayList<Horari> horaris = new ArrayList<>();
         if (c.moveToFirst()) {
             do {
-                horaris.add(new Horari(c.getString(0), c.getString(1), c.getString(2)
-                        , c.getString(3), c.getString(4)));
+                horaris.add(new Horari(c.getString(2), c.getString(3), c.getString(4)
+                        , c.getString(5), c.getString(6)));
             } while (c.moveToNext());
         }
         c.close();
@@ -158,6 +165,5 @@ public class BDActivity extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
     }
 }

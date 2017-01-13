@@ -1,5 +1,6 @@
 package com.horario.matias.horario;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     TextView tvGrup, tvDia, tvAssignatura, tvProfessor, tvHoraInici, tvClasse, tvHoraFi, tvSeparacio;
     ImageButton btnActualizar;
-    Horari horari = new Horari();
     BDActivity sqlHelper;
 
     /**
@@ -41,24 +41,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvHoraInici = (TextView) findViewById(R.id.tvHoraInici);
         tvClasse = (TextView) findViewById(R.id.tvClase);
         tvSeparacio = (TextView) findViewById(R.id.tvSeparacio);
-        //btnActualizar = (ImageButton) findViewById(R.id.btnAct);
-        //btnActualizar.setOnClickListener(this);
+        btnActualizar = (ImageButton) findViewById(R.id.btnAct);
+        btnActualizar.setOnClickListener(this);
 
         tvDia.setText(Horari.getDiaSetmanaSistema());
+
         if (SPConfActivity.getString(this, SPConfActivity.getNombre()).isEmpty() &&
                 SPConfActivity.getString(this, SPConfActivity.getGrup()).isEmpty() &&
                 !SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
             Toast.makeText(this, getString(R.string.introdPrefs), Toast.LENGTH_LONG).show();
+            sqlHelper = new BDActivity(this);
+            sqlHelper.getWritableDatabase();
+            setTV();
         } else {
             Toast.makeText(this, "Benvingut " + SPConfActivity.getString(this, SPConfActivity.getNombre()), Toast.LENGTH_LONG).show();
             tvGrup.setText(SPConfActivity.getString(this, SPConfActivity.getGrup()));
             if (SPConfActivity.getString(this, SPConfActivity.getGrup()).isEmpty()) {
                 Toast.makeText(this, "Falta introduir el grup.", Toast.LENGTH_SHORT).show();
             } else {
-                sqlHelper = new BDActivity(this);
-                sqlHelper.getWritableDatabase();
-                sqlHelper.getHorariPerHora();
-                horari.setTV();
+                //setTV();
                 if (SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
                     tvGrup.setTextColor(Color.WHITE);
                     tvDia.setTextColor(Color.WHITE);
@@ -68,11 +69,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Quan fem click al botó del actualitzar, comprovarà una altra vegada es valors i s'actualitzaràn.
+     * @param view
+     */
     @Override
     public void onClick(View view) {
-        //Una vez funcionen las consultas y settear los textviews, añadir los metodos aqui.
-        sqlHelper.getHorariPerHora();
-        horari.setTV();
+        setTV();
     }
 
     /**
@@ -95,9 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == R.id.menuConfiguracion) {
             startActivity(new Intent(this, Configuracio.class));
             return true;
@@ -105,4 +106,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Mètode que recull els valors de la select i possa el contingut als TextViews.
+     */
+    public void setTV() {
+        Horari horari = new BDActivity(this).getHorariPerHora();
+        if (horari != null) {
+            tvAssignatura.setText(horari.getAssignatura());
+            tvProfessor.setText(horari.getProfessor());
+            tvClasse.setText(horari.getClasse());
+            tvHoraInici.setText(horari.getHoraInici());
+            tvSeparacio.setVisibility(View.VISIBLE);
+            tvHoraFi.setText(horari.getHoraFinal());
+        }
+    }
 }

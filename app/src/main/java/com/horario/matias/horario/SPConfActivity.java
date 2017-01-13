@@ -1,6 +1,7 @@
 package com.horario.matias.horario;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -13,6 +14,7 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
     private static final String GRUP = "grup";
     private static final String TEMAFOSC = "temaFosc";
     Horari horari;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,21 +95,20 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
             case NOM:
                 String nom ="" + shaPrefs.getString(NOM, "NULL");
                 Toast.makeText(getActivity().getApplicationContext(), getString(R.string.guardatOk), Toast.LENGTH_SHORT).show();
-                //horari.reiniciarApp();
                 break;
             case GRUP:
                 String grup = "" + shaPrefs.getString(GRUP, "NULL");
                 Toast.makeText(getActivity().getApplicationContext(), getString(R.string.guardatOk), Toast.LENGTH_SHORT).show();
-                //horari.reiniciarApp();
+                horari.reiniciarApp();
                 break;
             case TEMAFOSC:
                 boolean temaFosc = shaPrefs.getBoolean(TEMAFOSC, false);
                 if(temaFosc){
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.foscActivat), Toast.LENGTH_SHORT).show();
-                    //horari.reiniciarApp();
+                    horari.reiniciarApp();
                 }else {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.foscDesactivat), Toast.LENGTH_SHORT).show();
-                    //horari.reiniciarApp();
+                    horari.reiniciarApp();
                 }
                 break;
         }

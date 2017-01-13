@@ -1,5 +1,6 @@
 package com.horario.matias.horario;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,9 +23,6 @@ public class Horari extends AppCompatActivity {
     private String classe;
     private String horaInici;
     private String horaFinal;
-
-    public Horari() {
-    }
 
     public Horari(String assignatura, String professor, String classe, String horaInici, String horaFinal) {
         this.assignatura = assignatura;
@@ -61,16 +59,6 @@ public class Horari extends AppCompatActivity {
     }
 
     /**
-     * Per reiniciar l'aplicació quan modifiquem les preferencies per que tinguin efecte.
-     */
-    public void reiniciarApp() {
-        Intent i = getBaseContext().getPackageManager()
-                .getLaunchIntentForPackage(getBaseContext().getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-    }
-
-    /**
      * Per obtenir el dia de la semana actual del sistema.
      *
      * @return
@@ -84,6 +72,15 @@ public class Horari extends AppCompatActivity {
     }
 
     /**
+     * Per reiniciar l'aplicació quan modifiquem les preferencies per que tinguin efecte.
+     */
+    public void reiniciarApp() {
+        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
+
+    /**
      * Per obtenir l'hora actual del sistema.
      *
      * @return
@@ -92,19 +89,6 @@ public class Horari extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         return dateFormat.format(date);
-    }
-
-    /**
-     * Mètode per possar el contingut als TextViews.
-     */
-    public void setTV() {
-        MainActivity ma = new MainActivity();
-        ma.tvClasse.setText(getClasse());
-        ma.tvHoraInici.setText(getHoraInici());
-        ma.tvHoraFi.setText(getHoraFinal());
-        ma.tvProfessor.setText(getProfessor());
-        ma.tvAssignatura.setText(getAssignatura());
-        ma.tvSeparacio.setVisibility(View.VISIBLE);
     }
 }
 

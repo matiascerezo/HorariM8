@@ -23,6 +23,13 @@
                 app:srcCompat="@drawable/ic_refresh_black_24dp"
                 android:id="@+id/btnAct"
                 android:gravity="right"/>
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvDia"
@@ -107,7 +114,8 @@
                 android:layout_marginLeft="205dp"
                 android:layout_marginTop="165dp"
                 android:textColor="#000"
-                android:textSize="25dp" />
+                android:textSize="25dp"
+                android:text="18:00" />
 
             <ImageView
                 android:id="@+id/imPizarra"
