@@ -44,12 +44,13 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
         SharedPreferences shaPref = PreferenceManager.getDefaultSharedPreferences(context);
         return shaPref.getString(key, "");
     }
+    /*
     public static void setString (Context context, final String key, final String valor) {
         SharedPreferences shaPref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = shaPref.edit();
         editor.putString(key, valor);
         editor.commit();
-    }
+    }*/
 
     /**
      * Per valors boolean
@@ -62,12 +63,13 @@ public class SPConfActivity extends PreferenceFragment implements SharedPreferen
         SharedPreferences shaPref = PreferenceManager.getDefaultSharedPreferences(context);
         return shaPref.getBoolean(key, defaultValue);
     }
+    /*
     public static void setBoolean (Context context, final String key, final boolean valor) {
         SharedPreferences shaPref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = shaPref.edit();
         editor.putBoolean(key, valor);
         editor.commit();
-    }
+    }*/
 
 
     public static String getNombre() {

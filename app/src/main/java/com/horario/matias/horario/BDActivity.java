@@ -63,7 +63,7 @@ public class BDActivity extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(1, 'M07. Des. de interfícies', 1)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(2, 'Tutoria', 2)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(3, 'M08. Prog. de d. mòbils', 3)");
-        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(4, 'M10. Sistemes de g. empresarial', 4)");
+        sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(4, 'M10. Sist. de gest. empresarial', 4)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(5, 'M02/06. BD i Accés a dades', 5)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(6, 'M09. Prog. de processos', 5)");
         sqLiteDatabase.execSQL("INSERT INTO TAssignatura VALUES(7, 'M03. Programació bàsica', 2)");

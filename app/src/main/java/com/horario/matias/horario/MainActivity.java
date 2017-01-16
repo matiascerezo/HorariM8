@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, getString(R.string.introdPrefs), Toast.LENGTH_LONG).show();
             sqlHelper = new BDActivity(this);
             sqlHelper.getWritableDatabase();
-            //setTV(); -> prueba
         } else {
             Toast.makeText(this, "Benvingut " + SPConfActivity.getString(this, SPConfActivity.getNombre()), Toast.LENGTH_LONG).show();
             tvGrup.setText(SPConfActivity.getString(this, SPConfActivity.getGrup()));
@@ -61,8 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 setTV();
                 if (SPConfActivity.getBoolean(this, SPConfActivity.getTemaFosc(), false)) {
-                    tvGrup.setTextColor(Color.WHITE);
-                    tvDia.setTextColor(Color.WHITE);
+                    canviarColor();
                     findViewById(R.id.activity_horario).setBackgroundColor(Color.rgb(169, 169, 169));
                 }
             }
@@ -113,17 +111,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setTV() {
         Horari horari = new BDActivity(this).getHorariPerHora();
         if (horari != null) {
-            if (horari.getAssignatura().isEmpty()) {
-                tvProfessor.setText("Avui es festa.");
-            } else {
-                tvAssignatura.setText(horari.getAssignatura());
-                tvProfessor.setText(horari.getProfessor());
-                tvClasse.setText(horari.getClasse());
-                tvHoraInici.setText(horari.getHoraInici());
-                tvSeparacio.setVisibility(View.VISIBLE);
-                tvHoraFi.setText(horari.getHoraFinal());
-                Toast.makeText(this, "Actualitzat", Toast.LENGTH_SHORT).show();
-            }
+            tvAssignatura.setText(horari.getAssignatura());
+            tvProfessor.setText(horari.getProfessor());
+            tvClasse.setText(horari.getClasse());
+            tvHoraInici.setText(horari.getHoraInici());
+            tvSeparacio.setVisibility(View.VISIBLE);
+            tvHoraFi.setText(horari.getHoraFinal());
+            visibleTV();
+            Toast.makeText(this, "Actualitzat", Toast.LENGTH_SHORT).show();
+        } else {
+            amagarTV();
         }
+    }
+
+    /**
+     * Mètode que amaga els textviews quan no hi ha classe.
+     */
+    public void amagarTV() {
+        tvAssignatura.setVisibility(View.GONE);
+        tvProfessor.setVisibility(View.GONE);
+        tvHoraInici.setVisibility(View.GONE);
+        tvHoraFi.setVisibility(View.GONE);
+        tvSeparacio.setVisibility(View.GONE);
+        tvClasse.setText("Sense classe");
+        Toast.makeText(this, "Encara no hi ha classe.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void visibleTV() {
+        tvAssignatura.setVisibility(View.VISIBLE);
+        tvProfessor.setVisibility(View.VISIBLE);
+        tvHoraInici.setVisibility(View.VISIBLE);
+        tvHoraFi.setVisibility(View.VISIBLE);
+        tvSeparacio.setVisibility(View.VISIBLE);
+    }
+
+
+    /**
+     * Mètode per canviar el color a la lletra quan es selecciona el fons fosc.
+     */
+    public void canviarColor() {
+        tvGrup.setTextColor(Color.WHITE);
+        tvDia.setTextColor(Color.WHITE);
+        tvAssignatura.setTextColor(Color.WHITE);
+        tvProfessor.setTextColor(Color.WHITE);
+        tvClasse.setTextColor(Color.WHITE);
+        tvHoraFi.setTextColor(Color.WHITE);
+        tvHoraInici.setTextColor(Color.WHITE);
+        tvSeparacio.setTextColor(Color.WHITE);
     }
 }
